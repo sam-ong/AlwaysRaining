@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Always Raining",
+  "Author": "Sam",
+  "Version": "1.0.0",
+  "Description": "This mod sets the weather to always raining, except on days where the weather is set (eg. festivals, wedding)",
+  "UniqueID": "Sam.AlwaysRaining",
+  "EntryDll": "AlwaysRaining.dll",
+  "MinimumApiVersion": "1.0.0",
+  "UpdateKeys": []
+}

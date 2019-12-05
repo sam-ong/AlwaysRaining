@@ -6,9 +6,8 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Tools;
-using TwoDoggies.Framework;
 
-namespace TwoDoggies
+namespace AlwaysRaining
 {
     public class ModEntry : Mod
     {
