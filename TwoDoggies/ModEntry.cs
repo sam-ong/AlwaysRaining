@@ -1,14 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Tools;
+using TwoDoggies.Framework;
 
 namespace TwoDoggies
 {
     public class ModEntry : Mod
     {
+        //private ModConfig config;
+        private readonly HashSet<int> normalWeather = new HashSet<int>
+            {
+                Game1.weather_sunny,
+                Game1.weather_rain,
+                Game1.weather_lightning,
+                Game1.weather_debris,
+                Game1.weather_snow
+            };
+
         /*********
         ** Public methods
         *********/
@@ -16,25 +29,34 @@ namespace TwoDoggies
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            
+            //Events
+            helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
+            helper.Events.GameLoop.Saving += OnSaving;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            // ignore if player hasn't loaded a save yet
-            if (!Context.IsWorldReady)
-                return;
+            this.HandleNewDay();
+        }
 
-            // print button presses to the console window
-            this.Monitor.Log($"{Game1.player.Name} pressed {e.Button}.", LogLevel.Debug);
+        private void OnSaving(object sender, SavingEventArgs e)
+        {
+            this.HandleNewDay();
+        }
+
+        private void HandleNewDay()
+        {
+            if (!this.normalWeather.Contains(Game1.weatherForTomorrow))
+            {
+                this.Monitor.Log("it no rain", LogLevel.Debug);
+                return;
+            }
+            this.Monitor.Log("it rain", LogLevel.Debug);
+            Game1.weatherForTomorrow = Game1.weather_rain;
         }
     }
 }
